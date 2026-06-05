@@ -7,9 +7,4 @@ export default defineConfig({
   build: {
     inlineStylesheets: 'always',
   },
-  vite: {
-    build: {
-      cssMinify: 'lightningcss',
-    },
-  },
 });
