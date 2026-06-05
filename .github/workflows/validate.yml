@@ -1,0 +1,28 @@
+name: Validate
+
+# Runs on every PR (and on pushes to main). The Astro build runs the content
+# collection's Zod schema against every JSON file, so a malformed or invalid
+# entry fails this check and can't be merged. A green check = the entry is valid.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (validates all entries against the schema)
+        run: npm run build

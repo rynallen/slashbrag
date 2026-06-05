@@ -1,0 +1,991 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import BragCard from '../components/BragCard.astro';
+import { SITE } from '../config';
+import Logo from '../images/Logo-Wordmark.svg';
+import heroBg from '../images/bg-hero-elevated-lines.webp';
+import iconBuild from '../images/build.svg';
+import iconCode from '../images/code.svg';
+import iconTrophy from '../images/trophy.svg';
+import iconWriting from '../images/writing.svg';
+import iconSpeaker from '../images/speaker.svg';
+import iconFeather from '../images/feather.svg';
+import iconTeach from '../images/teach.svg';
+import iconOne from '../images/one.svg';
+import iconTwo from '../images/two.svg';
+import iconFamily from '../images/family.svg';
+
+// Pull every entry, then sort alphabetically by name.
+// To randomize on each build instead, replace the sort with:
+//   .sort(() => Math.random() - 0.5)
+const entries = (await getCollection('brags')).sort((a, b) =>
+  a.data.name.localeCompare(b.data.name)
+);
+---
+
+<Base>
+  <section class="hero" style={`background-image: url(${heroBg.src})`}>
+    <div class="wrap">
+      <div class="hero__row">
+        <img src={Logo.src} alt="Brag Directory" class="hero__logo" />
+        <p class="hero__desc">a directory of <code class="brag-highlight">/brag</code> pages</p>
+      </div>
+      <nav class="tabs">
+        <div class="tabs__inner">
+          <button class="tab active" data-tab="about"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="tab__icon" height="20" width="20"><path d="M12 0a12 12 0 1 0 12 12A12 12 0 0 0 12 0Zm0.25 5a1.5 1.5 0 1 1 -1.5 1.5 1.5 1.5 0 0 1 1.5 -1.5Zm2.25 13.5h-4a1 1 0 0 1 0 -2h0.75a0.25 0.25 0 0 0 0.25 -0.25v-4.5a0.25 0.25 0 0 0 -0.25 -0.25h-0.75a1 1 0 0 1 0 -2h1a2 2 0 0 1 2 2v4.75a0.25 0.25 0 0 0 0.25 0.25h0.75a1 1 0 0 1 0 2Z" fill="currentColor"></path></svg> About</button>
+          <button class="tab" data-tab="search"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="tab__icon" height="20" width="20"><path d="m23.69 22.28 -2.51 -2.51a0.24 0.24 0 0 1 0 -0.3 5.49 5.49 0 0 0 -3.37 -8.31 5.5 5.5 0 1 0 1.69 10 0.24 0.24 0 0 1 0.3 0l2.51 2.51a1 1 0 0 0 1.41 -1.41ZM16.52 20a3.5 3.5 0 1 1 3.5 -3.5 3.5 3.5 0 0 1 -3.5 3.5Z" fill="currentColor"></path><path d="M15.75 9.56a7 7 0 0 1 4.87 1.29 0.25 0.25 0 0 0 0.4 -0.19V4.52A1.5 1.5 0 0 0 19.52 3H9.63a0.5 0.5 0 0 1 -0.44 -0.28L8.24 0.85A1.49 1.49 0 0 0 6.9 0H1.52A1.5 1.5 0 0 0 0 1.52v15A1.5 1.5 0 0 0 1.52 18h7.86a0.24 0.24 0 0 0 0.24 -0.3A6.76 6.76 0 0 1 10 14a7 7 0 0 1 5.75 -4.44Z" fill="currentColor"></path></svg> Browse directory</button>
+          <button class="tab tab--icon tab--right" data-tab="add" aria-label="Add yours"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="tab__icon" height="22" width="22"><path d="M12 24A12 12 0 1 0 0 12a12 12 0 0 0 12 12ZM6 11h4.75a0.25 0.25 0 0 0 0.25 -0.25V6a1 1 0 0 1 2 0v4.75a0.25 0.25 0 0 0 0.25 0.25H18a1 1 0 0 1 0 2h-4.75a0.25 0.25 0 0 0 -0.25 0.25V18a1 1 0 0 1 -2 0v-4.75a0.25 0.25 0 0 0 -0.25 -0.25H6a1 1 0 0 1 0 -2Z" fill="currentColor"></path></svg></button>
+        </div>
+      </nav>
+    </div>
+  </section>
+
+  <div class="tab-panel active" id="panel-about">
+    <section class="wrap about">
+      <div class="about__grid">
+        <div>
+          <h2 class="about__title">You've done some cool sh*t!<br/>Feel free to brag a little.</h2>
+          <p class="about__lead">
+            A <code class="brag-highlight">/brag</code> page is a running list of accomplishments on your personal site — projects shipped, talks given, the work you're most proud of.
+          </p>
+          <ol class="about__steps">
+            <li><img src={iconOne.src} alt="" class="about__step-icon" /> Create a <code class="brag-highlight">/brag</code> vanity URL on your personal site.</li>
+            <li><img src={iconTwo.src} alt="" class="about__step-icon" /> <button type="button" class="about__steps-link" data-switch-tab="add">Link to it here</button> so the world can find it.</li>
+          </ol>
+        </div>
+        <div class="about__ideas">
+          <h3 class="about__ideas-title">What goes on a <code class="brag-highlight">/brag</code> page?</h3>
+          <ul class="about__list">
+            <li><img src={iconBuild.src} alt="" class="about__list-icon" /> Projects you shipped</li>
+            <li><img src={iconSpeaker.src} alt="" class="about__list-icon" /> Talks or presentations you gave</li>
+            <li><img src={iconCode.src} alt="" class="about__list-icon" /> Open source contributions</li>
+            <li><img src={iconWriting.src} alt="" class="about__list-icon" /> Blog posts or articles you wrote</li>
+            <li><img src={iconTrophy.src} alt="" class="about__list-icon" /> Promotions or role changes</li>
+            <li><img src={iconTeach.src} alt="" class="about__list-icon" /> Mentoring or teaching wins</li>
+            <li><img src={iconTrophy.src} alt="" class="about__list-icon" /> Awards or recognition</li>
+            <li><img src={iconFamily.src} alt="" class="about__list-icon" /> Family & life wins</li>
+            <li><img src={iconBuild.src} alt="" class="about__list-icon" /> Hard problems you solved</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="tab-panel" id="panel-search" hidden>
+    <section class="wrap directory">
+      <div class="directory__bar">
+        <div class="directory__search">
+          <label for="search" class="sr-only">Search the directory</label>
+          <input
+            type="text"
+            id="search"
+            placeholder="Search names or descriptions…"
+            autocomplete="off"
+          />
+          <button type="button" id="search-clear" class="search-clear" hidden aria-label="Clear search">✕</button>
+        </div>
+        <button type="button" id="star-filter" class="star-filter" aria-pressed="false" aria-label="Show starred only">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+          <span class="star-filter__label">Starred</span>
+          <span class="star-filter__count" id="star-count" hidden></span>
+        </button>
+      </div>
+
+      <p class="directory__count">
+        <span id="count">{entries.length}</span>
+        {entries.length === 1 ? 'page' : 'pages'}
+      </p>
+
+      <div class="grid" id="grid">
+        {entries.map((entry) => <BragCard {...entry.data} />)}
+      </div>
+
+      <p class="empty" id="empty" hidden>No pages match that search.</p>
+
+      <button type="button" class="back-to-top" id="back-to-top" aria-label="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="20" width="20" aria-hidden="true">
+          <path d="M19.22 7.06 12.72 0.31a1 1 0 0 0 -1.42 0L4.78 7.06a1 1 0 0 0 1.44 1.38l4.78 -5V23a1 1 0 0 0 2 0V3.48l4.78 5a1 1 0 0 0 0.72 0.31 1 1 0 0 0 0.69 -0.28 1 1 0 0 0 0.03 -1.45Z" fill="currentColor"/>
+        </svg>
+        Back to top
+      </button>
+    </section>
+  </div>
+
+  <!-- Person Modal -->
+  <dialog id="person-modal" class="modal">
+    <div class="modal__content">
+      <button type="button" class="modal__close" aria-label="Close">&times;</button>
+      <div class="modal__grid">
+        <div class="modal__left">
+          <div class="modal__header">
+            <div class="modal__avatar-wrap" id="modal-avatar-wrap"></div>
+            <div>
+              <h2 class="modal__name" id="modal-name"></h2>
+              <a class="modal__link" id="modal-link" href="" target="_blank" rel="noopener">
+                <span id="modal-host"></span>
+                <svg class="modal__link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <p class="modal__desc" id="modal-desc"></p>
+          <div class="modal__tags" id="modal-tags"></div>
+        </div>
+        <div class="modal__right">
+          <h3 class="modal__highlights-title">Highlights</h3>
+          <ul class="modal__highlights">
+            <li><img src={iconBuild.src} alt="" class="modal__highlight-icon" /> Shipped a major product redesign</li>
+            <li><img src={iconSpeaker.src} alt="" class="modal__highlight-icon" /> Spoke at 3 conferences this year</li>
+            <li><img src={iconCode.src} alt="" class="modal__highlight-icon" /> Maintained popular open source project</li>
+            <li><img src={iconWriting.src} alt="" class="modal__highlight-icon" /> Published 12 technical articles</li>
+            <li><img src={iconTrophy.src} alt="" class="modal__highlight-icon" /> Won industry award for dev tooling</li>
+            <li><img src={iconTeach.src} alt="" class="modal__highlight-icon" /> Mentored 4 junior developers</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="tab-panel" id="panel-add" hidden>
+    <section class="wrap add">
+      <h2 class="add__title">Add your <code class="brag-highlight">/brag</code> page</h2>
+      <p class="add__intro">
+        Fill this in and hit the button. It opens GitHub with a new file already
+        written for you — review it, commit, and open a pull request.
+      </p>
+      <form id="brag-form" novalidate>
+        <div class="field">
+          <label for="name">Name</label>
+          <input type="text" id="add-name" name="name" maxlength="80" required placeholder="Ada Lovelace" />
+        </div>
+        <div class="field">
+          <label for="url">Link to your <code class="brag-highlight">/brag</code> page</label>
+          <input type="url" id="add-url" name="url" required placeholder="https://yoursite.com/brag" />
+          <p class="hint">Where your brag lives. A full URL including https://</p>
+        </div>
+        <div class="field">
+          <label for="description">Who you are / what you do</label>
+          <textarea id="add-description" name="description" maxlength="200" required placeholder="One or two sentences."></textarea>
+          <p class="hint"><span id="counter">0</span>/200 characters</p>
+        </div>
+        <p class="error" id="error" role="alert" hidden></p>
+        <button type="submit" class="btn btn-primary" id="submit">Open a pre-filled pull request →</button>
+      </form>
+    </section>
+  </div>
+</Base>
+
+<script>
+  import { animate } from 'motion';
+
+  // --- Tabs ---
+  const tabs = document.querySelectorAll<HTMLElement>('.tab');
+  const panels = document.querySelectorAll<HTMLElement>('.tab-panel');
+
+  function switchTab(name: string) {
+    tabs.forEach(t => {
+      const isActive = t.dataset.tab === name;
+      t.classList.toggle('active', isActive);
+      if (isActive) {
+        animate(t, { y: [4, 0] }, { type: 'spring', bounce: 0.15, duration: 0.3 });
+      }
+    });
+    panels.forEach(p => {
+      const active = p.id === `panel-${name}`;
+      if (active) {
+        p.hidden = false;
+        p.classList.add('active');
+        animate(p, { opacity: [0, 1], y: [12, 0] }, { duration: 0.3, easing: 'ease-out' });
+      } else {
+        p.hidden = true;
+        p.classList.remove('active');
+      }
+    });
+  }
+
+  tabs.forEach(t => {
+    if (t.dataset.tab) t.addEventListener('click', () => switchTab(t.dataset.tab!));
+  });
+  document.querySelectorAll<HTMLElement>('[data-switch-tab]').forEach(el =>
+    el.addEventListener('click', () => switchTab(el.dataset.switchTab!))
+  );
+
+  // --- Starred (localStorage) ---
+  const STORAGE_KEY = 'brag-starred';
+
+  function getStarred(): Set<string> {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return new Set(raw ? JSON.parse(raw) : []);
+    } catch {
+      return new Set();
+    }
+  }
+
+  function saveStarred(starred: Set<string>) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([...starred]));
+    } catch { /* storage full or blocked */ }
+  }
+
+  let starredCache = getStarred();
+
+  function toggleStar(name: string): boolean {
+    const isNowStarred = !starredCache.has(name);
+    if (isNowStarred) starredCache.add(name);
+    else starredCache.delete(name);
+    saveStarred(starredCache);
+    return isNowStarred;
+  }
+
+  // --- Fuzzy Search (Fuse.js) ---
+  import Fuse from 'fuse.js';
+
+  const input = document.getElementById('search') as HTMLInputElement;
+  const clearBtn = document.getElementById('search-clear') as HTMLButtonElement;
+  const starFilterBtn = document.getElementById('star-filter') as HTMLButtonElement;
+  const starCountEl = document.getElementById('star-count');
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.card'));
+  const count = document.getElementById('count');
+  const empty = document.getElementById('empty');
+
+  let showStarredOnly = false;
+
+  const fuseEntries = cards.map((card, i) => ({
+    idx: i,
+    name: card.dataset.name ?? '',
+    desc: card.dataset.desc ?? '',
+    tags: card.dataset.tags ?? '',
+  }));
+
+  const fuse = new Fuse(fuseEntries, {
+    keys: [
+      { name: 'name', weight: 2 },
+      { name: 'tags', weight: 1.5 },
+      { name: 'desc', weight: 1 },
+    ],
+    threshold: 0.4,
+    ignoreLocation: true,
+    minMatchCharLength: 2,
+  });
+
+  function applyFilter() {
+    if (showStarredOnly) {
+      let visible = 0;
+      cards.forEach(card => {
+        const name = card.dataset.name ?? '';
+        const show = starredCache.has(name);
+        card.hidden = !show;
+        if (show) visible++;
+      });
+      if (count) count.textContent = String(visible);
+      if (empty) {
+        empty.hidden = visible !== 0;
+        if (visible === 0) empty.textContent = 'No starred pages yet. Click the ★ on any card to save it.';
+      }
+      requestAnimationFrame(updateBackToTop);
+      return;
+    }
+
+    const q = input.value.trim();
+    clearBtn.hidden = q === '';
+    if (q === '') {
+      cards.forEach(c => c.hidden = false);
+      if (count) count.textContent = String(cards.length);
+      if (empty) empty.hidden = true;
+      requestAnimationFrame(updateBackToTop);
+      return;
+    }
+    const results = new Set(fuse.search(q).map(r => r.item.idx));
+    let visible = 0;
+    cards.forEach((card, i) => {
+      const match = results.has(i);
+      card.hidden = !match;
+      if (match) visible++;
+    });
+    if (count) count.textContent = String(visible);
+    if (empty) {
+      empty.hidden = visible !== 0;
+      if (visible === 0) empty.textContent = 'No pages match that search.';
+    }
+    requestAnimationFrame(updateBackToTop);
+  }
+
+  clearBtn?.addEventListener('click', () => {
+    input.value = '';
+    applyFilter();
+    input.focus();
+  });
+
+  input?.addEventListener('input', applyFilter);
+
+  // --- Star button init ---
+  cards.forEach(card => {
+    const btn = card.querySelector('.card__star') as HTMLButtonElement | null;
+    if (!btn) return;
+    const name = card.dataset.name ?? '';
+
+    if (starredCache.has(name)) {
+      btn.setAttribute('aria-pressed', 'true');
+    }
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isNowStarred = toggleStar(name);
+      btn.setAttribute('aria-pressed', String(isNowStarred));
+      animate(btn, { scale: [1, 1.4, 1] }, { duration: 0.3, easing: 'ease-out' });
+      updateStarCount();
+      applyFilter();
+    });
+  });
+
+  // --- Starred filter toggle ---
+  function updateStarCount() {
+    const n = starredCache.size;
+    if (starCountEl) {
+      starCountEl.textContent = String(n);
+      starCountEl.hidden = n === 0;
+    }
+  }
+
+  starFilterBtn?.addEventListener('click', () => {
+    showStarredOnly = !showStarredOnly;
+    starFilterBtn.setAttribute('aria-pressed', String(showStarredOnly));
+    input.disabled = showStarredOnly;
+    clearBtn.hidden = true;
+    applyFilter();
+    animate(starFilterBtn, { scale: [1, 1.06, 1] }, { duration: 0.2, easing: 'ease-out' });
+  });
+
+  updateStarCount();
+
+  // --- Back to top ---
+  const backToTop = document.getElementById('back-to-top');
+
+  function updateBackToTop() {
+    if (!backToTop) return;
+    const scrollable = document.documentElement.scrollHeight > window.innerHeight + 100;
+    backToTop.hidden = !scrollable;
+  }
+
+  backToTop?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  updateBackToTop();
+  window.addEventListener('resize', updateBackToTop);
+
+  // --- Person Modal ---
+  const modal = document.getElementById('person-modal') as HTMLDialogElement;
+  const modalName = document.getElementById('modal-name')!;
+  const modalDesc = document.getElementById('modal-desc')!;
+  const modalLink = document.getElementById('modal-link') as HTMLAnchorElement;
+  const modalHost = document.getElementById('modal-host')!;
+  const modalTags = document.getElementById('modal-tags')!;
+  const modalAvatarWrap = document.getElementById('modal-avatar-wrap')!;
+  const modalClose = modal.querySelector('.modal__close') as HTMLButtonElement;
+
+  function openModal(card: HTMLElement) {
+    const name = card.dataset.fullName ?? '';
+    const url = card.dataset.url ?? '';
+    const desc = card.dataset.description ?? '';
+    const avatar = card.dataset.avatar ?? '';
+    const host = card.dataset.host ?? '';
+    const tags = (card.dataset.tagsOriginal ?? '').split(',').filter(Boolean);
+
+    modalName.textContent = name;
+    modalDesc.textContent = desc;
+    modalLink.href = url;
+    modalHost.textContent = host;
+
+    if (avatar) {
+      modalAvatarWrap.innerHTML = `<img src="${avatar}" alt="" class="modal__avatar" width="64" height="64" />`;
+    } else {
+      modalAvatarWrap.innerHTML = `<div class="modal__avatar modal__avatar--fallback">${name.charAt(0).toUpperCase()}</div>`;
+    }
+
+    modalTags.innerHTML = '';
+    tags.forEach(tag => {
+      const span = document.createElement('span');
+      span.className = 'modal__tag';
+      span.textContent = tag;
+      modalTags.appendChild(span);
+    });
+
+    modal.showModal();
+    animate(modal, { opacity: [0, 1] }, { duration: 0.2, easing: 'ease-out' });
+    animate(modal.querySelector('.modal__content')!, { scale: [0.95, 1], y: [10, 0] }, { duration: 0.25, easing: 'ease-out' });
+  }
+
+  cards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('.card__star') || target.closest('.card__link')) return;
+      openModal(card);
+    });
+  });
+
+  modalClose.addEventListener('click', () => modal.close());
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.close();
+  });
+</script>
+
+<style>
+  .brag-highlight {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    font-weight: 700;
+    color: #1C80CB;
+    background: rgba(28, 128, 203, 0.12);
+    padding: 0.1em 0.4em;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Hero */
+  .hero {
+    padding-block: 48px;
+    background-color: #111;
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    position: relative;
+  }
+  .hero__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .hero__logo {
+    height: clamp(4rem, 8vw, 6.5rem);
+    width: auto;
+  }
+  .hero__desc {
+    color: #fff;
+    font-size: clamp(0.9rem, 1.5vw + 0.3rem, var(--text-lg));
+    letter-spacing: 0.02em;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  }
+  .hero__desc .brag-highlight {
+    text-shadow: none;
+  }
+
+  /* Tabs */
+  .tabs {
+    margin-top: var(--space-4);
+    margin-bottom: -48px;
+    padding-bottom: 0;
+  }
+  .tabs__inner {
+    display: flex;
+    align-items: flex-end;
+    padding-left: 3px;
+  }
+  .tab {
+    --tab-girth: 12px;
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: #fff;
+    background: #3a3a3a;
+    border: none;
+    padding: 0.7em 1.8em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    transition: color 0.15s var(--ease), background 0.15s var(--ease);
+    clip-path: shape(
+      from bottom left,
+      curve to var(--tab-girth) calc(100% - var(--tab-girth)) with var(--tab-girth) 100%,
+      vline to var(--tab-girth),
+      curve to calc(var(--tab-girth) * 2) 0 with var(--tab-girth) 0,
+      hline to calc(100% - calc(var(--tab-girth) * 2)),
+      curve to calc(100% - var(--tab-girth)) var(--tab-girth) with calc(100% - var(--tab-girth)) 0,
+      vline to calc(100% - var(--tab-girth)),
+      curve to 100% 100% with calc(100% - var(--tab-girth)) 100%
+    );
+  }
+  .tab:not(:first-child) {
+    margin-inline-start: calc(var(--tab-girth) * -1.2);
+  }
+  .tab:hover {
+    background: #4a4a4a;
+  }
+  .tab.active {
+    color: var(--color-ink);
+    font-weight: 700;
+    background: var(--color-bg);
+    z-index: 2;
+    filter: drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.08));
+  }
+  .tab--icon {
+    padding-inline: 1.8em;
+  }
+  .tab--right {
+    margin-left: auto !important;
+  }
+
+  @supports not (clip-path: shape(from 0 0, line to 100% 100%)) {
+    .tab {
+      clip-path: none;
+      border-radius: 12px 12px 0 0;
+    }
+    .tab:not(:first-child) {
+      margin-inline-start: 4px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero {
+      padding-block: 32px;
+    }
+    .hero__row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-2);
+    }
+    .tabs {
+      margin-top: var(--space-3);
+      margin-bottom: -32px;
+    }
+    .tab {
+      font-size: var(--text-base);
+      padding: 0.65em 1.3em;
+      --tab-girth: 10px;
+    }
+    .tab__icon {
+      width: 16px;
+      height: 16px;
+    }
+    .tab--icon {
+      padding-inline: 1.3em;
+    }
+  }
+
+  /* Tab panels */
+  .tab-panel {
+    min-height: 60vh;
+  }
+
+  /* About */
+  .about {
+    padding-block: var(--space-5);
+  }
+  .about__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  @media (min-width: 768px) {
+    .about__grid {
+      grid-template-columns: 1.2fr 1fr;
+      gap: var(--space-5);
+      align-items: start;
+    }
+  }
+  .about__title {
+    font-size: clamp(1.5rem, 4vw + 0.5rem, var(--text-2xl));
+    line-height: 1.4;
+  }
+  .about__lead {
+    max-width: 52ch;
+    margin-top: var(--space-2);
+    font-size: clamp(1rem, 2vw + 0.3rem, var(--text-lg));
+    color: var(--color-ink-soft);
+  }
+
+  .about__steps {
+    list-style: none;
+    margin-top: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 0.85em;
+  }
+  .about__steps li {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    font-size: clamp(1rem, 2vw + 0.3rem, var(--text-lg));
+    color: var(--color-ink-soft);
+  }
+  .about__step-icon {
+    width: clamp(20px, 2.5vw, 24px);
+    height: clamp(20px, 2.5vw, 24px);
+    flex-shrink: 0;
+    opacity: 0.55;
+  }
+  .about__steps-link {
+    background: none;
+    border: none;
+    font: inherit;
+    color: #1C80CB;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    padding: 0;
+  }
+  .about__steps-link:hover {
+    color: #155fa0;
+  }
+
+  .about__ideas {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-3);
+  }
+  .about__ideas-title {
+    font-size: clamp(0.9rem, 1.5vw + 0.3rem, var(--text-base));
+    font-weight: 600;
+    margin-bottom: var(--space-2);
+  }
+  .about__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65em;
+  }
+  .about__list li {
+    display: flex;
+    align-items: center;
+    gap: 0.7em;
+    font-size: clamp(0.95rem, 1.5vw + 0.3rem, var(--text-lg));
+    color: var(--color-ink);
+    background: color-mix(in srgb, var(--color-surface-2) 25%, transparent);
+    padding: 0.5em 0.75em;
+    border-radius: var(--radius-sm);
+  }
+  .about__list-icon {
+    width: clamp(14px, 2vw, 18px);
+    height: clamp(14px, 2vw, 18px);
+    flex-shrink: 0;
+    opacity: 0.65;
+  }
+
+  /* Directory / Search */
+  .directory {
+    padding-top: var(--space-3);
+  }
+  .directory__bar {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--space-4);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--color-bg);
+  }
+  .directory__count {
+    font-size: var(--text-base);
+    color: var(--color-ink-faint);
+    font-family: var(--font-body);
+    font-weight: 400;
+    margin-bottom: var(--space-2);
+  }
+  .directory__count span {
+    color: var(--color-ink);
+  }
+  .directory__search {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+  }
+  .directory__search input {
+    padding: 0.85em 1em;
+    font-size: clamp(0.95rem, 1.5vw + 0.3rem, var(--text-lg));
+  }
+  .directory__search input::placeholder {
+    font-weight: 500;
+  }
+  .search-clear {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-ink-faint);
+    font-size: var(--text-sm);
+    padding: 4px;
+    line-height: 1;
+    border-radius: 50%;
+    transition: color 0.15s var(--ease), background 0.15s var(--ease);
+  }
+  .search-clear:hover {
+    color: var(--color-ink);
+    background: var(--color-surface-2);
+  }
+  .search-clear[hidden] {
+    display: none;
+  }
+  .directory__search input:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .star-filter {
+    display: inline-flex;
+    align-items: center;
+    align-self: stretch;
+    gap: 0.35em;
+    font-family: var(--font-body);
+    font-size: clamp(0.95rem, 1.5vw + 0.3rem, var(--text-lg));
+    font-weight: 500;
+    color: var(--color-ink-faint);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0 1em;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: color 0.15s var(--ease), border-color 0.15s var(--ease), background 0.15s var(--ease);
+  }
+  .star-filter:hover {
+    color: var(--color-ink-soft);
+    border-color: var(--color-ink-faint);
+  }
+  .star-filter[aria-pressed="true"] {
+    color: #d4a017;
+    border-color: #d4a017;
+    background: rgba(212, 160, 23, 0.08);
+  }
+  .star-filter[aria-pressed="true"] svg {
+    fill: currentColor;
+  }
+  .star-filter__count {
+    font-size: var(--text-xs);
+    background: var(--color-surface-2);
+    padding: 0.1em 0.45em;
+    border-radius: 9999px;
+    min-width: 1.4em;
+    text-align: center;
+  }
+  .star-filter[aria-pressed="true"] .star-filter__count {
+    background: rgba(212, 160, 23, 0.15);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  @media (min-width: 640px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .empty {
+    text-align: center;
+    color: var(--color-ink-faint);
+    padding-block: var(--space-5);
+  }
+
+  /* Back to top */
+  .back-to-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    margin: var(--space-4) auto 0;
+    padding: 0.6em 1.4em;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-ink-faint);
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: color 0.15s var(--ease), border-color 0.15s var(--ease), background 0.15s var(--ease);
+  }
+  .back-to-top:hover {
+    color: var(--color-ink);
+    border-color: var(--color-ink-faint);
+    background: var(--color-surface);
+  }
+
+  /* Modal */
+  .modal {
+    border: none;
+    border-radius: var(--radius);
+    padding: 0;
+    max-width: var(--max-width);
+    width: calc(100% - var(--space-4));
+    margin: auto;
+    background: var(--color-surface);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+    overflow: visible;
+  }
+  .modal::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+  }
+  .modal__content {
+    padding: var(--space-4);
+    position: relative;
+  }
+  .modal__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+  @media (max-width: 640px) {
+    .modal__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .modal__left {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .modal__close {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-2);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--color-ink-faint);
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    transition: color 0.15s var(--ease), background 0.15s var(--ease);
+  }
+  .modal__close:hover {
+    color: var(--color-ink);
+    background: var(--color-surface-2);
+  }
+  .modal__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .modal__avatar-wrap :global(.modal__avatar) {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .modal__avatar-wrap :global(.modal__avatar--fallback) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 600;
+  }
+  .modal__name {
+    font-size: var(--text-2xl);
+    line-height: 1.2;
+  }
+  .modal__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: #1C80CB;
+    word-break: break-all;
+    transition: color 0.15s var(--ease);
+  }
+  .modal__link:hover {
+    color: #155fa0;
+    text-decoration: none;
+  }
+  .modal__link-icon {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    transition: transform 0.15s var(--ease);
+  }
+  .modal__link:hover .modal__link-icon {
+    transform: translate(1px, -1px);
+  }
+  .modal__desc {
+    color: var(--color-ink-soft);
+    font-size: var(--text-lg);
+    line-height: 1.6;
+  }
+  .modal__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .modal__tags :global(.modal__tag) {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: var(--color-ink-soft);
+    background: var(--color-surface-2);
+    padding: 0.2em 0.6em;
+    border-radius: var(--radius-sm);
+  }
+  .modal__right {
+    border-left: 1px solid var(--color-border);
+    padding-left: var(--space-4);
+  }
+  @media (max-width: 640px) {
+    .modal__right {
+      border-left: none;
+      border-top: 1px solid var(--color-border);
+      padding-left: 0;
+      padding-top: var(--space-3);
+    }
+  }
+  .modal__highlights-title {
+    font-size: var(--text-base);
+    font-weight: 600;
+    margin-bottom: var(--space-2);
+  }
+  .modal__highlights {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55em;
+  }
+  .modal__highlights li {
+    display: flex;
+    align-items: center;
+    gap: 0.7em;
+    font-size: var(--text-sm);
+    color: var(--color-ink);
+    background: color-mix(in srgb, var(--color-surface-2) 25%, transparent);
+    padding: 0.5em 0.75em;
+    border-radius: var(--radius-sm);
+  }
+  .modal__highlight-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    opacity: 0.65;
+  }
+
+  /* Add form */
+  .add {
+    padding-block: var(--space-5);
+  }
+  .add form {
+    max-width: 520px;
+  }
+  .add__title {
+    font-size: var(--text-2xl);
+  }
+  .add__intro {
+    margin-top: var(--space-2);
+    margin-bottom: var(--space-4);
+    color: var(--color-ink-soft);
+  }
+  .field {
+    margin-bottom: var(--space-3);
+  }
+</style>

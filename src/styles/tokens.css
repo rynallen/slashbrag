@@ -1,0 +1,69 @@
+/*
+ * ============================================================================
+ *  DESIGN TOKENS  —  this is the file to edit.
+ * ============================================================================
+ *  Everything visual (color, type, spacing, radius, shadow) is a variable here.
+ *  Drop your styleguide in by changing these values; you should rarely need to
+ *  touch the components themselves. Fonts are loaded in src/layouts/Base.astro
+ *  (swap the <link> there to change typefaces).
+ *
+ *  The defaults below are a deliberately restrained, warm editorial placeholder
+ *  — meant to look intentional but get out of the way of your real design.
+ * ============================================================================
+ */
+
+:root {
+  /* ---- Color: surfaces ---- */
+  --color-bg: #f7f4ee;            /* paper */
+  --color-surface: #fffdf8;       /* cards */
+  --color-surface-2: #efe9df;     /* subtle fills, inputs */
+  --color-border: #e2dccf;
+
+  /* ---- Color: ink ---- */
+  --color-ink: #1c1a17;           /* primary text */
+  --color-ink-soft: #5c574e;      /* secondary text */
+  --color-ink-faint: #908a7d;     /* meta text */
+
+  /* ---- Color: accent ---- */
+  --color-accent: #1c1a17;        /* near-black — links, primary actions */
+  --color-accent-ink: #fffdf8;    /* text on accent */
+  --color-accent-soft: #e2dccf;   /* accent tint */
+
+  /* ---- Typography ---- */
+  --font-display: 'Excon', -apple-system, system-ui, sans-serif;
+  --font-body: 'Supreme', -apple-system, system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --text-xs: 0.78rem;
+  --text-sm: 0.9rem;
+  --text-base: 1.05rem;
+  --text-lg: 1.3rem;
+  --text-xl: 1.7rem;
+  --text-2xl: 2.4rem;
+  --text-3xl: clamp(2.6rem, 6vw, 4.5rem);
+
+  --leading-tight: 1.1;
+  --leading-normal: 1.55;
+
+  /* ---- Spacing (8px base grid) ---- */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+  --space-6: 4.5rem;
+  --space-7: 7rem;
+
+  /* ---- Geometry ---- */
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --max-width: 1080px;
+
+  /* ---- Shadow ---- */
+  --shadow-sm: 0 1px 2px rgba(28, 26, 23, 0.05);
+  --shadow: 0 6px 24px rgba(28, 26, 23, 0.07);
+
+  /* ---- Motion ---- */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
