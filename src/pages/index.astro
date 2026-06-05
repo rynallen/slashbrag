@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import BragCard from '../components/BragCard.astro';
-import { SITE } from '../config';
+import { SITE, REPO } from '../config';
 import Logo from '../images/Logo-Wordmark.svg';
 import heroBg from '../images/bg-hero-elevated-lines.webp';
 import iconBuild from '../images/build.svg';
@@ -10,7 +10,6 @@ import iconCode from '../images/code.svg';
 import iconTrophy from '../images/trophy.svg';
 import iconWriting from '../images/writing.svg';
 import iconSpeaker from '../images/speaker.svg';
-import iconFeather from '../images/feather.svg';
 import iconTeach from '../images/teach.svg';
 import iconOne from '../images/one.svg';
 import iconTwo from '../images/two.svg';
@@ -114,40 +113,6 @@ const entries = (await getCollection('brags')).sort((a, b) =>
     </section>
   </div>
 
-  <!-- Person Modal -->
-  <dialog id="person-modal" class="modal">
-    <div class="modal__content">
-      <button type="button" class="modal__close" aria-label="Close">&times;</button>
-      <div class="modal__grid">
-        <div class="modal__left">
-          <div class="modal__header">
-            <div class="modal__avatar-wrap" id="modal-avatar-wrap"></div>
-            <div>
-              <h2 class="modal__name" id="modal-name"></h2>
-              <a class="modal__link" id="modal-link" href="" target="_blank" rel="noopener">
-                <span id="modal-host"></span>
-                <svg class="modal__link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-            </div>
-          </div>
-          <p class="modal__desc" id="modal-desc"></p>
-          <div class="modal__tags" id="modal-tags"></div>
-        </div>
-        <div class="modal__right">
-          <h3 class="modal__highlights-title">Highlights</h3>
-          <ul class="modal__highlights">
-            <li><img src={iconBuild.src} alt="" class="modal__highlight-icon" /> Shipped a major product redesign</li>
-            <li><img src={iconSpeaker.src} alt="" class="modal__highlight-icon" /> Spoke at 3 conferences this year</li>
-            <li><img src={iconCode.src} alt="" class="modal__highlight-icon" /> Maintained popular open source project</li>
-            <li><img src={iconWriting.src} alt="" class="modal__highlight-icon" /> Published 12 technical articles</li>
-            <li><img src={iconTrophy.src} alt="" class="modal__highlight-icon" /> Won industry award for dev tooling</li>
-            <li><img src={iconTeach.src} alt="" class="modal__highlight-icon" /> Mentored 4 junior developers</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </dialog>
-
   <div class="tab-panel" id="panel-add" hidden>
     <section class="wrap add">
       <h2 class="add__title">Add your <code class="brag-highlight">/brag</code> page</h2>
@@ -155,30 +120,53 @@ const entries = (await getCollection('brags')).sort((a, b) =>
         Fill this in and hit the button. It opens GitHub with a new file already
         written for you — review it, commit, and open a pull request.
       </p>
-      <form id="brag-form" novalidate>
-        <div class="field">
-          <label for="name">Name</label>
-          <input type="text" id="add-name" name="name" maxlength="80" required placeholder="Ada Lovelace" />
-        </div>
-        <div class="field">
-          <label for="url">Link to your <code class="brag-highlight">/brag</code> page</label>
-          <input type="url" id="add-url" name="url" required placeholder="https://yoursite.com/brag" />
-          <p class="hint">Where your brag lives. A full URL including https://</p>
-        </div>
-        <div class="field">
-          <label for="description">Who you are / what you do</label>
-          <textarea id="add-description" name="description" maxlength="200" required placeholder="One or two sentences."></textarea>
-          <p class="hint"><span id="counter">0</span>/200 characters</p>
-        </div>
-        <p class="error" id="error" role="alert" hidden></p>
-        <button type="submit" class="btn btn-primary" id="submit">Open a pre-filled pull request →</button>
-      </form>
+      <div class="add__grid">
+        <form id="brag-form" novalidate autocomplete="off">
+          <div class="field">
+            <label for="add-name">Name</label>
+            <input type="text" id="add-name" name="name" maxlength="80" required placeholder="Ada Lovelace" />
+          </div>
+          <div class="field">
+            <label for="add-url">Link to your <code class="brag-highlight">/brag</code> page</label>
+            <input type="url" id="add-url" name="url" required placeholder="https://yoursite.com/brag" />
+            <p class="hint">Where your brag lives. A full URL including https://</p>
+          </div>
+          <div class="field">
+            <label for="add-description">Who you are / what you do</label>
+            <textarea id="add-description" name="description" required placeholder="One or two sentences."></textarea>
+          </div>
+          <div class="field">
+            <label for="add-tags-input">Tags</label>
+            <div class="tag-input" id="tag-input">
+              <div class="tag-input__tags" id="tag-list"></div>
+              <input type="text" id="add-tags-input" placeholder="Type and press Enter…" autocomplete="off" />
+            </div>
+            <p class="hint">Add up to 5 tags (e.g. Design, React, Leadership)</p>
+          </div>
+          <p class="error" id="error" role="alert" hidden></p>
+        </form>
+
+        <aside class="preview">
+          <p class="preview__label">Preview</p>
+          <div class="preview__code">
+            <pre class="preview__json" id="preview-json">{`{\n  "name": "",\n  "url": "",\n  "description": "",\n  "tags": []\n}`}</pre>
+          </div>
+          <div class="preview__actions">
+            <button type="button" class="btn btn-ghost" id="copy-json">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy JSON
+            </button>
+            <button type="submit" form="brag-form" class="btn btn-primary" id="submit">Open pull request →</button>
+          </div>
+        </aside>
+      </div>
     </section>
   </div>
 </Base>
 
 <script>
   import { animate } from 'motion';
+  import { REPO } from '../config';
 
   // --- Tabs ---
   const tabs = document.querySelectorAll<HTMLElement>('.tab');
@@ -376,59 +364,131 @@ const entries = (await getCollection('brags')).sort((a, b) =>
   updateBackToTop();
   window.addEventListener('resize', updateBackToTop);
 
-  // --- Person Modal ---
-  const modal = document.getElementById('person-modal') as HTMLDialogElement;
-  const modalName = document.getElementById('modal-name')!;
-  const modalDesc = document.getElementById('modal-desc')!;
-  const modalLink = document.getElementById('modal-link') as HTMLAnchorElement;
-  const modalHost = document.getElementById('modal-host')!;
-  const modalTags = document.getElementById('modal-tags')!;
-  const modalAvatarWrap = document.getElementById('modal-avatar-wrap')!;
-  const modalClose = modal.querySelector('.modal__close') as HTMLButtonElement;
-
-  function openModal(card: HTMLElement) {
-    const name = card.dataset.fullName ?? '';
-    const url = card.dataset.url ?? '';
-    const desc = card.dataset.description ?? '';
-    const avatar = card.dataset.avatar ?? '';
-    const host = card.dataset.host ?? '';
-    const tags = (card.dataset.tagsOriginal ?? '').split(',').filter(Boolean);
-
-    modalName.textContent = name;
-    modalDesc.textContent = desc;
-    modalLink.href = url;
-    modalHost.textContent = host;
-
-    if (avatar) {
-      modalAvatarWrap.innerHTML = `<img src="${avatar}" alt="" class="modal__avatar" width="64" height="64" />`;
-    } else {
-      modalAvatarWrap.innerHTML = `<div class="modal__avatar modal__avatar--fallback">${name.charAt(0).toUpperCase()}</div>`;
-    }
-
-    modalTags.innerHTML = '';
-    tags.forEach(tag => {
-      const span = document.createElement('span');
-      span.className = 'modal__tag';
-      span.textContent = tag;
-      modalTags.appendChild(span);
-    });
-
-    modal.showModal();
-    animate(modal, { opacity: [0, 1] }, { duration: 0.2, easing: 'ease-out' });
-    animate(modal.querySelector('.modal__content')!, { scale: [0.95, 1], y: [10, 0] }, { duration: 0.25, easing: 'ease-out' });
-  }
-
+  // --- Card click → open URL ---
   cards.forEach(card => {
     card.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
       if (target.closest('.card__star') || target.closest('.card__link')) return;
-      openModal(card);
+      const url = card.dataset.url;
+      if (url) window.open(url, '_blank', 'noopener');
     });
   });
 
-  modalClose.addEventListener('click', () => modal.close());
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) modal.close();
+  // --- Add form ---
+  const addForm = document.getElementById('brag-form');
+  const addName = document.getElementById('add-name') as HTMLInputElement;
+  const addUrl = document.getElementById('add-url') as HTMLInputElement;
+  const addDesc = document.getElementById('add-description') as HTMLTextAreaElement;
+  const addError = document.getElementById('error') as HTMLElement;
+  const tagInput = document.getElementById('add-tags-input') as HTMLInputElement;
+  const tagList = document.getElementById('tag-list')!;
+  const tagWrap = document.getElementById('tag-input')!;
+  const tags: string[] = [];
+  const MAX_TAGS = 5;
+
+  function renderTags() {
+    tagList.innerHTML = '';
+    tags.forEach((tag, i) => {
+      const pill = document.createElement('span');
+      pill.className = 'tag-pill';
+      pill.innerHTML = `${tag}<button type="button" class="tag-pill__remove" aria-label="Remove ${tag}">✕</button>`;
+      pill.querySelector('button')!.addEventListener('click', () => {
+        tags.splice(i, 1);
+        renderTags();
+        refreshPreview();
+        tagInput.focus();
+      });
+      tagList.appendChild(pill);
+    });
+  }
+
+  function addTag(value: string) {
+    const trimmed = value.trim();
+    if (!trimmed || tags.length >= MAX_TAGS) return;
+    if (tags.some(t => t.toLowerCase() === trimmed.toLowerCase())) return;
+    tags.push(trimmed);
+    renderTags();
+    refreshPreview();
+  }
+
+  tagInput.addEventListener('keydown', (e) => {
+    if ((e.key === 'Enter' || e.key === ',' || e.key === 'Tab') && tagInput.value.trim()) {
+      e.preventDefault();
+      addTag(tagInput.value.replace(',', ''));
+      tagInput.value = '';
+    }
+    if (e.key === 'Backspace' && !tagInput.value && tags.length) {
+      tags.pop();
+      renderTags();
+      refreshPreview();
+    }
+  });
+
+  tagWrap.addEventListener('click', () => tagInput.focus());
+
+  function slugify(s: string) {
+    return s.toLowerCase().trim().normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  const previewJson = document.getElementById('preview-json');
+  const previewPath = document.getElementById('preview-path');
+  const copyBtn = document.getElementById('copy-json');
+
+  function refreshPreview() {
+    const entry: Record<string, unknown> = {
+      name: addName.value.trim(),
+      url: addUrl.value.trim(),
+      description: addDesc.value.trim(),
+    };
+    if (tags.length) entry.tags = tags;
+    if (previewJson) previewJson.textContent = JSON.stringify(entry, null, 2);
+    if (previewPath) {
+      const slug = slugify(entry.name) || 'your-name';
+      previewPath.textContent = `${REPO.contentPath}/${slug}.json`;
+    }
+  }
+
+  [addName, addUrl, addDesc].forEach(el =>
+    el?.addEventListener('input', refreshPreview)
+  );
+
+  copyBtn?.addEventListener('click', () => {
+    const entry: Record<string, unknown> = {
+      name: addName.value.trim(),
+      url: addUrl.value.trim(),
+      description: addDesc.value.trim(),
+    };
+    if (tags.length) entry.tags = tags;
+    navigator.clipboard.writeText(JSON.stringify(entry, null, 2) + '\n');
+    const original = copyBtn.innerHTML;
+    copyBtn.textContent = 'Copied!';
+    setTimeout(() => { copyBtn.innerHTML = original; }, 1500);
+  });
+
+  addForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = addName.value.trim();
+    const url = addUrl.value.trim();
+    const desc = addDesc.value.trim();
+
+    addError.hidden = true;
+    if (!name) { addError.textContent = 'Please enter your name.'; addError.hidden = false; return; }
+    if (!url) { addError.textContent = 'Please enter a URL.'; addError.hidden = false; return; }
+    if (!desc) { addError.textContent = 'Please add a short description.'; addError.hidden = false; return; }
+
+    const data: Record<string, unknown> = { name, url, description: desc };
+    if (tags.length) data.tags = [...tags];
+    const entry = JSON.stringify(data, null, 2) + '\n';
+    const filename = `${REPO.contentPath}/${slugify(name)}.json`;
+    const ghUrl = `https://github.com/${REPO.owner}/${REPO.name}/new/${REPO.branch}?filename=${encodeURIComponent(filename)}&value=${encodeURIComponent(entry)}`;
+    window.open(ghUrl, '_blank', 'noopener');
+    addForm.reset();
+    tags.length = 0;
+    renderTags();
+    refreshPreview();
   });
 </script>
 
@@ -811,171 +871,9 @@ const entries = (await getCollection('brags')).sort((a, b) =>
     background: var(--color-surface);
   }
 
-  /* Modal */
-  .modal {
-    border: none;
-    border-radius: var(--radius);
-    padding: 0;
-    max-width: var(--max-width);
-    width: calc(100% - var(--space-4));
-    margin: auto;
-    background: var(--color-surface);
-    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
-    overflow: visible;
-  }
-  .modal::backdrop {
-    background: rgba(0, 0, 0, 0.45);
-  }
-  .modal__content {
-    padding: var(--space-4);
-    position: relative;
-  }
-  .modal__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-4);
-  }
-  @media (max-width: 640px) {
-    .modal__grid {
-      grid-template-columns: 1fr;
-    }
-  }
-  .modal__left {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-  .modal__close {
-    position: absolute;
-    top: var(--space-2);
-    right: var(--space-2);
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.5rem;
-    line-height: 1;
-    color: var(--color-ink-faint);
-    padding: 4px 8px;
-    border-radius: var(--radius-sm);
-    transition: color 0.15s var(--ease), background 0.15s var(--ease);
-  }
-  .modal__close:hover {
-    color: var(--color-ink);
-    background: var(--color-surface-2);
-  }
-  .modal__header {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-  }
-  .modal__avatar-wrap :global(.modal__avatar) {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-  }
-  .modal__avatar-wrap :global(.modal__avatar--fallback) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-accent);
-    color: var(--color-accent-ink);
-    font-family: var(--font-display);
-    font-size: var(--text-2xl);
-    font-weight: 600;
-  }
-  .modal__name {
-    font-size: var(--text-2xl);
-    line-height: 1.2;
-  }
-  .modal__link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4em;
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: #1C80CB;
-    word-break: break-all;
-    transition: color 0.15s var(--ease);
-  }
-  .modal__link:hover {
-    color: #155fa0;
-    text-decoration: none;
-  }
-  .modal__link-icon {
-    width: 13px;
-    height: 13px;
-    flex-shrink: 0;
-    transition: transform 0.15s var(--ease);
-  }
-  .modal__link:hover .modal__link-icon {
-    transform: translate(1px, -1px);
-  }
-  .modal__desc {
-    color: var(--color-ink-soft);
-    font-size: var(--text-lg);
-    line-height: 1.6;
-  }
-  .modal__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .modal__tags :global(.modal__tag) {
-    font-size: var(--text-xs);
-    font-weight: 500;
-    color: var(--color-ink-soft);
-    background: var(--color-surface-2);
-    padding: 0.2em 0.6em;
-    border-radius: var(--radius-sm);
-  }
-  .modal__right {
-    border-left: 1px solid var(--color-border);
-    padding-left: var(--space-4);
-  }
-  @media (max-width: 640px) {
-    .modal__right {
-      border-left: none;
-      border-top: 1px solid var(--color-border);
-      padding-left: 0;
-      padding-top: var(--space-3);
-    }
-  }
-  .modal__highlights-title {
-    font-size: var(--text-base);
-    font-weight: 600;
-    margin-bottom: var(--space-2);
-  }
-  .modal__highlights {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.55em;
-  }
-  .modal__highlights li {
-    display: flex;
-    align-items: center;
-    gap: 0.7em;
-    font-size: var(--text-sm);
-    color: var(--color-ink);
-    background: color-mix(in srgb, var(--color-surface-2) 25%, transparent);
-    padding: 0.5em 0.75em;
-    border-radius: var(--radius-sm);
-  }
-  .modal__highlight-icon {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-    opacity: 0.65;
-  }
-
   /* Add form */
   .add {
     padding-block: var(--space-5);
-  }
-  .add form {
-    max-width: 520px;
   }
   .add__title {
     font-size: var(--text-2xl);
@@ -985,7 +883,129 @@ const entries = (await getCollection('brags')).sort((a, b) =>
     margin-bottom: var(--space-4);
     color: var(--color-ink-soft);
   }
+  .add__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  @media (min-width: 768px) {
+    .add__grid {
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: start;
+    }
+  }
   .field {
     margin-bottom: var(--space-3);
+  }
+  .tag-input {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0.45em 0.6em;
+    cursor: text;
+    transition: border-color 0.15s var(--ease);
+  }
+  .tag-input:focus-within {
+    border-color: var(--color-accent);
+  }
+  .tag-input__tags {
+    display: contents;
+  }
+  .tag-input input {
+    flex: 1;
+    min-width: 80px;
+    border: none;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--color-ink);
+    padding: 0.25em 0.25em;
+    outline: none;
+  }
+  .tag-input__tags :global(.tag-pill) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: var(--color-ink-soft);
+    background: var(--color-surface-2);
+    padding: 0.25em 0.4em 0.25em 0.6em;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    animation: tag-in 0.15s var(--ease);
+  }
+  @keyframes tag-in {
+    from { opacity: 0; scale: 0.9; }
+    to { opacity: 1; scale: 1; }
+  }
+  .tag-input__tags :global(.tag-pill__remove) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--color-ink-faint) 15%, transparent);
+    border: none;
+    cursor: pointer;
+    color: var(--color-ink-faint);
+    font-size: 0.7em;
+    padding: 0;
+    line-height: 1;
+    border-radius: 50%;
+    width: 1.4em;
+    height: 1.4em;
+    transition: color 0.15s var(--ease), background 0.15s var(--ease);
+  }
+  .tag-input__tags :global(.tag-pill__remove:hover) {
+    color: var(--color-ink);
+    background: color-mix(in srgb, var(--color-ink-faint) 30%, transparent);
+  }
+
+  .preview {
+    position: sticky;
+    top: 90px;
+  }
+  .preview__label {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-ink-soft);
+    margin-bottom: var(--space-1);
+  }
+  .preview__code {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-3);
+    overflow-x: auto;
+  }
+  .preview__path {
+    display: block;
+    color: var(--color-ink-faint);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-1);
+    margin-bottom: var(--space-1);
+  }
+  .preview__json {
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+  }
+  .preview__actions {
+    display: flex;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+  .preview__actions .btn {
+    flex: 1;
+    justify-content: center;
   }
 </style>

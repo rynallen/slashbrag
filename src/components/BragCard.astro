@@ -145,9 +145,13 @@ try {
     font-size: var(--text-xs);
     color: var(--color-ink-faint);
     word-break: break-all;
+    transition: color 0.18s var(--ease);
+  }
+  .card:hover .card__link {
+    color: #1C80CB;
   }
   .card__link:hover {
-    color: var(--color-accent);
+    color: #155fa0;
     text-decoration: none;
   }
   .card__arrow {
