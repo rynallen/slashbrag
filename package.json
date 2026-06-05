@@ -6,12 +6,21 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "check": "astro check"
+    "preview": "npm run build && wrangler dev",
+    "check": "astro check",
+    "generate-types": "wrangler types",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^13.6.1",
     "astro": "^6.4.3",
     "fuse.js": "^7.4.1",
     "motion": "^12.40.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.98.0"
+  },
+  "overrides": {
+    "vite": "^7"
   }
 }
